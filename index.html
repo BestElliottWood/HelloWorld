@@ -329,151 +329,6 @@
     </div>
   </div>
   <!-- built files will be auto injected -->
-  <script>
-    var WINDOW_SC = {
-      a: {
-        aa: 12,
-        ab: 23,
-      },
-      b: 3
-    };
-
-    var abc = 'color';
-
-    function getVariable(virtualName) {
-      if (virtualName) {
-        var nameArray = String(virtualName).split('.');
-        var keyName = nameArray.shift();
-        var globalV = window[keyName];
-
-        while (nameArray.length > 0 && globalV) {
-          keyName = nameArray.shift();
-          if (Object.prototype.hasOwnProperty.call(globalV, keyName)) {
-            globalV = globalV[keyName];
-          } else {
-            break;
-          }
-        }
-        return globalV;
-      }
-
-      return undefined;
-    }
-
-    function setCookie(name, value) {
-      var Days = 30;
-      var exp = new Date();
-      exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
-      document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
-    }
-
-    function handleClick() {
-      var selectType = document.getElementById('input-type').value;
-      var inputValue = document.getElementById('input-xpath').value || '';
-      var attrName = document.getElementById('input-attribute').value || '';
-      var nodes = selectType === 'ID' ? getDomByID(inputValue) :
-        selectType === 'CSS' ? getDomBySelector(inputValue) :
-        selectType === 'XPATH' ? getDomByXPath(inputValue) : [];
-      displayResult(nodes, attrName);
-    }
-
-    function getDomByID(id) {
-      if (id) {
-        return [document.getElementById(id)]
-      }
-      return [];
-    }
-
-    // CSS选择器
-    function getDomBySelector(selector) {
-      if (selector) {
-        return document.querySelectorAll(selector);
-      }
-      return [];
-    }
-
-    // XPath表达式
-    function getDomByXPath(STR_XPATH) {
-      var xnodes = [];
-      if (document.evaluate) { //判断是否支持evaluate
-        var xresult = document.evaluate(STR_XPATH, document, null, XPathResult.ANY_TYPE, null);
-
-        var xres;
-        while (xres = xresult.iterateNext()) {
-          xnodes.push(xres);
-        }
-      } else {
-        document.setProperty("SelectionLanguage", "XPath");
-        xnodes = document.selectNodes(STR_XPATH);
-      }
-
-      return xnodes;
-    }
-
-    function displayResult(nodes, attrName) {
-      var texts = [],
-        attrs = [],
-        tagNames = [],
-        temp;
-      if (nodes) {
-        for (var i = 0, len = nodes.length; i < len; i++) {
-          texts.push(nodes[i].innerHTML);
-          attrName && attrs.push(nodes[i].getAttribute(attrName));
-          temp = nodes[i].tagName.toLowerCase();
-          tagNames.indexOf(temp) === -1 && tagNames.push(temp);
-        }
-      }
-
-      document.getElementById('span-name').innerHTML = tagNames.join('、');
-      document.getElementById('span-value').innerHTML = texts.join('、');
-      document.getElementById('attr-name').innerHTML = attrName;
-      document.getElementById('attr-value').innerHTML = attrs.join('、');
-    }
-
-    setCookie('name', 'age=4;country=USA');
-
-    function startQuery() {
-      window.document.body.onmouseover = function (event) {
-        let el = event.target;
-        addClass(el, 'box-outline');
-      };
-      window.document.body.onmouseout = function (event) {
-        let el = event.target;
-        removeClass(el, 'box-outline');
-      };
-      window.document.body.onmousedown = function (event) {
-        let el = event.target;
-        let cssPath = getCSSPath(el);
-
-        document.getElementById("css-path").innerHTML = cssPath;
-      };
-    }
-
-    function endQuery() {
-      window.document.body.onmouseover = null;
-      window.document.body.onmouseout = null;
-      window.document.body.onmousedown = null;
-    }
-
-    let isActive = false;
-    document.getElementById('active').onclick = function () {
-      if (isActive) {
-        endQuery();
-        isActive = false;
-      } else {
-        startQuery();
-        isActive = true;
-      }
-    }
-
-    var referrer = document.referrer;
-    var myURL = parseURL('www.baidu.com');
-    // console.log(referrer, myURL);
-
-    window.onpopstate = function (event) {
-      alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
-    };
-  </script>
 
   <script>
     /**
@@ -705,6 +560,154 @@
         segments: a.pathname.replace(/^\//, '').split('/')
       };
     }
+  </script>
+  <script>
+    // recordTier.push({
+    //   'eventName': 'CustomEvent'
+    // })
+    var WINDOW_SC = {
+      a: {
+        aa: 12,
+        ab: 23,
+      },
+      b: 3
+    };
+
+    var abc = 'color';
+
+    function getVariable(virtualName) {
+      if (virtualName) {
+        var nameArray = String(virtualName).split('.');
+        var keyName = nameArray.shift();
+        var globalV = window[keyName];
+
+        while (nameArray.length > 0 && globalV) {
+          keyName = nameArray.shift();
+          if (Object.prototype.hasOwnProperty.call(globalV, keyName)) {
+            globalV = globalV[keyName];
+          } else {
+            break;
+          }
+        }
+        return globalV;
+      }
+
+      return undefined;
+    }
+
+    function setCookie(name, value) {
+      var Days = 30;
+      var exp = new Date();
+      exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+      document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+    }
+
+    function handleClick() {
+      var selectType = document.getElementById('input-type').value;
+      var inputValue = document.getElementById('input-xpath').value || '';
+      var attrName = document.getElementById('input-attribute').value || '';
+      var nodes = selectType === 'ID' ? getDomByID(inputValue) :
+        selectType === 'CSS' ? getDomBySelector(inputValue) :
+        selectType === 'XPATH' ? getDomByXPath(inputValue) : [];
+      displayResult(nodes, attrName);
+    }
+
+    function getDomByID(id) {
+      if (id) {
+        return [document.getElementById(id)]
+      }
+      return [];
+    }
+
+    // CSS选择器
+    function getDomBySelector(selector) {
+      if (selector) {
+        return document.querySelectorAll(selector);
+      }
+      return [];
+    }
+
+    // XPath表达式
+    function getDomByXPath(STR_XPATH) {
+      var xnodes = [];
+      if (document.evaluate) { //判断是否支持evaluate
+        var xresult = document.evaluate(STR_XPATH, document, null, XPathResult.ANY_TYPE, null);
+
+        var xres;
+        while (xres = xresult.iterateNext()) {
+          xnodes.push(xres);
+        }
+      } else {
+        document.setProperty("SelectionLanguage", "XPath");
+        xnodes = document.selectNodes(STR_XPATH);
+      }
+
+      return xnodes;
+    }
+
+    function displayResult(nodes, attrName) {
+      var texts = [],
+        attrs = [],
+        tagNames = [],
+        temp;
+      if (nodes) {
+        for (var i = 0, len = nodes.length; i < len; i++) {
+          texts.push(nodes[i].innerHTML);
+          attrName && attrs.push(nodes[i].getAttribute(attrName));
+          temp = nodes[i].tagName.toLowerCase();
+          tagNames.indexOf(temp) === -1 && tagNames.push(temp);
+        }
+      }
+
+      document.getElementById('span-name').innerHTML = tagNames.join('、');
+      document.getElementById('span-value').innerHTML = texts.join('、');
+      document.getElementById('attr-name').innerHTML = attrName;
+      document.getElementById('attr-value').innerHTML = attrs.join('、');
+    }
+
+    setCookie('name', 'age=4;country=USA');
+
+    function startQuery() {
+      window.document.body.onmouseover = function (event) {
+        let el = event.target;
+        addClass(el, 'box-outline');
+      };
+      window.document.body.onmouseout = function (event) {
+        let el = event.target;
+        removeClass(el, 'box-outline');
+      };
+      window.document.body.onmousedown = function (event) {
+        let el = event.target;
+        let cssPath = getCSSPath(el);
+
+        document.getElementById("css-path").innerHTML = cssPath;
+      };
+    }
+
+    function endQuery() {
+      window.document.body.onmouseover = null;
+      window.document.body.onmouseout = null;
+      window.document.body.onmousedown = null;
+    }
+
+    let isActive = false;
+    document.getElementById('active').onclick = function () {
+      if (isActive) {
+        endQuery();
+        isActive = false;
+      } else {
+        startQuery();
+        isActive = true;
+      }
+    }
+
+    var referrer = document.referrer;
+    var myURL = parseURL('www.baidu.com');
+    // console.log(referrer, myURL);
+
+    window.onpopstate = function (event) {
+      alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
+    };
   </script>
 </body>
 
