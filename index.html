@@ -1,34 +1,404 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <!-- Google Tag Manager -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>dtmtest</title>
+  <!-- <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/common.css">
+  <link rel="stylesheet" href="css/table.css">
+  <link rel="stylesheet" href="css/form.css"> -->
+  <style>
+    body {
+      padding: 12px;
+    }
+
+    h2 {
+      margin: 12px 0 24px;
+      /* line-height: 0; */
+    }
+
+    .pane {
+      width: 1000px;
+      padding: 8px;
+      margin-top: 24px;
+      min-width: 1200px;
+      border: 1px solid #e1e1e1;
+    }
+
+    #pdd {
+      display: none;
+      margin-top: 20px;
+      width: 80px;
+      height: 40px;
+      background: blueviolet;
+    }
+
+    .layout-item {
+      display: inline-block;
+      vertical-align: top;
+      margin-right: 24px;
+    }
+
+    .result-line p {
+      margin-bottom: 12px;
+    }
+
+    .box-outline {
+      outline: 2px solid yellowgreen;
+    }
+  </style>
+
+<!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-N8MHZNS');</script>
-<!-- End Google Tag Manager -->
+  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-N8MHZNS');</script>
+  <!-- End Google Tag Manager -->
 </head>
+
 <body>
-    <!-- Google Tag Manager (noscript) -->
+  <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-N8MHZNS"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-    <h1>Welcome to my website!</h1>
-    <button onclick="pushData()">上报</button>
-    <button onclick="purchase()">购买</button>
-    
-    <script>
-        function pushData () {
-            console.log("Here to push data!");
+  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+
+  <div style="height: 10000px;width: 10000px">
+    <button onclick="window.location = 'demo1.html'">跳转</button>
+    <p>i am entry page</p>
+    <div class="pane">
+      <h2>历史记录变更</h2>
+      <div>
+        <a class="btn" href="#delete">delete</a>
+        <button onclick="window.location.hash='edit'">edit</button>
+      </div>
+      <div>
+        <button onclick="window.history.back()">back</button>
+        <button onclick="window.history.forward()">forward</button>
+        <button onclick="window.history.go(-1)">go</button>
+      </div>
+      <div>
+        <button onclick="history.pushState({page: 1}, 'title 1', '?page=1')">page 1</button>
+        <button onclick="history.replaceState({page: 2}, 'title 2', '?page=2')">page 2</button>
+      </div>
+    </div>
+    <div class="pane">
+      <h2>元素可见性</h2>
+      <button onclick="control()">显示/隐藏</button>
+      <div id="pdd" class="haha"></div>
+      <div style="height: 200px; margin-top: 12px;">
+        <div><button id="btn_all" onclick="display(-1)">全部显示</button></div>
+        <div style="display: inline-block; vertical-align: top; margin-right: 12px;">
+          <button id="btn_1" onclick="display(0)">显示</button>
+          <div id="block_1" class="block" style="width: 100px; height: 80px; background-color: orchid; display: none;">
+            方块1</div>
+        </div>
+        <div style="display: inline-block; vertical-align: top; margin-right: 12px;">
+          <button id="btn_2" onclick="display(1)">显示</button>
+          <div id="block_2" class="block" style="width: 100px; height: 80px; background-color: pink; display: none;">方块2
+          </div>
+        </div>
+        <div style="display: inline-block; vertical-align: top; margin-right: 12px;">
+          <button id="btn_3" onclick="display(2)">显示</button>
+          <div id="block_3" class="block" style="width: 100px; height: 80px; background-color: gray; display: none;">方块3
+          </div>
+        </div>
+        <div style="display: inline-block; vertical-align: top; margin-right: 12px;">
+          <button id="btn_4" onclick="display(3)">显示</button>
+          <div id="block_4" class="block" style="width: 100px; height: 80px; background-color: orange; display: none;">
+            方块4</div>
+        </div>
+      </div>
+      <script>
+        var isVisible = !1;
+        var showAll = false;
+        var visibleArray = [0, 0, 0, 0];
+
+        function display(index) {
+          index = Number(index);
+          var curVisible = false;
+          if (index > -1) {
+            curVisible = !visibleArray[index];
+            displayHandler(index + 1, curVisible);
+            showAll = visibleArray.filter(item => item).length === visibleArray.length;
+            document.getElementById('btn_all').innerHTML = curVisible ? '全部隐藏' : '全部显示';
+          } else {
+            curVisible = !showAll;
+            document.getElementById('btn_all').innerHTML = curVisible ? '全部隐藏' : '全部显示';
+            for (var i = 0, len = visibleArray.length; i < len; i++) {
+              displayHandler(i + 1, curVisible);
+            }
+            showAll = curVisible;
+          }
+        }
+
+        function displayHandler(index, status) {
+          document.getElementById('btn_' + index).innerHTML = status ? '隐藏' : '显示';
+          document.getElementById('block_' + index).style.display = status ? 'block' : 'none';
+          visibleArray[index - 1] = status;
+        }
+
+        function control() {
+          var _div = document.getElementById('pdd');
+          _div.style.display = isVisible ? 'none' : 'block';
+          isVisible = !isVisible;
+        }
+      </script>
+    </div>
+    <div class="pane">
+      <h2>视频</h2>
+      <div id="player"></div>
+
+      <!-- <script>
+        // 2. This code loads the IFrame Player API code asynchronously.
+        var tag = document.createElement('script');
+
+        tag.src = "https://www.youtube.com/iframe_api";
+        var firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+        
+        var player;
+
+        function onYouTubeIframeAPIReady() {
+          player = new YT.Player('player', {
+            height: '360',
+            width: '640',
+            videoId: 'M7lc1UVf-VE',
+            events: {
+              'onReady': onPlayerReady,
+              'onStateChange': onPlayerStateChange
+            }
+          });
         }
         
-        function purchase () {
-            console.log("You have bought a product!");
+        function onPlayerReady(event) {
+          event.target.playVideo();
         }
-    </script>
+        
+        var done = false;
+
+        function onPlayerStateChange(event) {
+          if (event.data == YT.PlayerState.PLAYING && !done) {
+            setTimeout(stopVideo, 6000);
+            done = true;
+          }
+        }
+
+        function stopVideo() {
+          player.stopVideo();
+        }
+      </script> -->
+    </div>
+
+    <div class="pane">
+      <h2>xpath</h2>
+      <div class="layout">
+        <div class="layout-item">
+          <table>
+            <thead>
+              <tr>
+                <th>title 1</th>
+                <th>title 2</th>
+                <th>title 3</th>
+                <th>title 4</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td id="apple" class="t-td" name="td-apple" data-text="v-apple">apple</td>
+                <td id="orange" class="t-td" name="td-orange" data-text="v-orange">orange</td>
+                <td id="watermalon" class="t-td" name="td-watermalon" data-text="v-watermalon">watermalon</td>
+                <td id="banana" class="t-td" name="td-banana" data-text="v-banana">banana</td>
+              </tr>
+              <tr>
+                <td id="shirt" class="t-td" name="shirt" data-text="v-shirt">shirt</td>
+                <td id="dress" class="t-td" name="dress" data-text="v-dress">dress</td>
+                <td id="jean" class="t-td" name="td-jean" data-text="v-jean">jean</td>
+                <td id="shoe" class="t-td" name="td-shoe" data-text="v-shoe">shoe</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="layout-item">
+          <select name="methodType" id="input-type">
+            <option value="ID">ID</option>
+            <option value="CSS">CSS</option>
+            <option value="XPATH">XPath</option>
+          </select>
+          <input id="input-xpath" type="text" placeholder="请输入" />
+          <!-- <input id="input-xpath" type="text" value="//table/tbody/tr[1]/td[last()-1]" placeholder="请输入" /> -->
+          <input id="input-attribute" type="text" placeholder="请输入属性名" />
+          <button onclick="handleClick()">获取DOM</button>
+          <hr />
+          <div class="result-line">
+            <p>标签名：<span id="span-name"></span></p>
+            <p>标签内容：<span id="span-value"></span></p>
+            <p>属性名：<span id="attr-name"></span></p>
+            <p>属性值：<span id="attr-value"></span></p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pane">
+      <h2>CSS路径</h2>
+      <button id="active" class="btn">激活/关闭</button>
+      <p>CSS路径：<span id="css-path"></span></p>
+    </div>
+  </div>
+  <!-- built files will be auto injected -->
+
+  <script src="js/utils.js"></script>
+  <script>
+    recordTier.push({
+      'eventName': 'CustomEvent'
+    })
+    var WINDOW_SC = {
+      a: {
+        aa: 12,
+        ab: 23,
+      },
+      b: 3
+    };
+
+    var abc = 'color';
+
+    function getVariable(virtualName) {
+      if (virtualName) {
+        var nameArray = String(virtualName).split('.');
+        var keyName = nameArray.shift();
+        var globalV = window[keyName];
+
+        while (nameArray.length > 0 && globalV) {
+          keyName = nameArray.shift();
+          if (Object.prototype.hasOwnProperty.call(globalV, keyName)) {
+            globalV = globalV[keyName];
+          } else {
+            break;
+          }
+        }
+        return globalV;
+      }
+
+      return undefined;
+    }
+
+    function setCookie(name, value) {
+      var Days = 30;
+      var exp = new Date();
+      exp.setTime(exp.getTime() + Days * 24 * 60 * 60 * 1000);
+      document.cookie = name + "=" + escape(value) + ";expires=" + exp.toGMTString();
+    }
+
+    function handleClick() {
+      var selectType = document.getElementById('input-type').value;
+      var inputValue = document.getElementById('input-xpath').value || '';
+      var attrName = document.getElementById('input-attribute').value || '';
+      var nodes = selectType === 'ID' ? getDomByID(inputValue) :
+        selectType === 'CSS' ? getDomBySelector(inputValue) :
+        selectType === 'XPATH' ? getDomByXPath(inputValue) : [];
+      displayResult(nodes, attrName);
+    }
+
+    function getDomByID(id) {
+      if (id) {
+        return [document.getElementById(id)]
+      }
+      return [];
+    }
+
+    // CSS选择器
+    function getDomBySelector(selector) {
+      if (selector) {
+        return document.querySelectorAll(selector);
+      }
+      return [];
+    }
+
+    // XPath表达式
+    function getDomByXPath(STR_XPATH) {
+      var xnodes = [];
+      if (document.evaluate) { //判断是否支持evaluate
+        var xresult = document.evaluate(STR_XPATH, document, null, XPathResult.ANY_TYPE, null);
+
+        var xres;
+        while (xres = xresult.iterateNext()) {
+          xnodes.push(xres);
+        }
+      } else {
+        document.setProperty("SelectionLanguage", "XPath");
+        xnodes = document.selectNodes(STR_XPATH);
+      }
+
+      return xnodes;
+    }
+
+    function displayResult(nodes, attrName) {
+      var texts = [],
+        attrs = [],
+        tagNames = [],
+        temp;
+      if (nodes) {
+        for (var i = 0, len = nodes.length; i < len; i++) {
+          texts.push(nodes[i].innerHTML);
+          attrName && attrs.push(nodes[i].getAttribute(attrName));
+          temp = nodes[i].tagName.toLowerCase();
+          tagNames.indexOf(temp) === -1 && tagNames.push(temp);
+        }
+      }
+
+      document.getElementById('span-name').innerHTML = tagNames.join('、');
+      document.getElementById('span-value').innerHTML = texts.join('、');
+      document.getElementById('attr-name').innerHTML = attrName;
+      document.getElementById('attr-value').innerHTML = attrs.join('、');
+    }
+
+    setCookie('name', 'age=4;country=USA');
+
+    function startQuery() {
+      window.document.body.onmouseover = function (event) {
+        let el = event.target;
+        addClass(el, 'box-outline');
+      };
+      window.document.body.onmouseout = function (event) {
+        let el = event.target;
+        removeClass(el, 'box-outline');
+      };
+      window.document.body.onmousedown = function (event) {
+        let el = event.target;
+        let cssPath = getCSSPath(el);
+
+        document.getElementById("css-path").innerHTML = cssPath;
+      };
+    }
+
+    function endQuery() {
+      window.document.body.onmouseover = null;
+      window.document.body.onmouseout = null;
+      window.document.body.onmousedown = null;
+    }
+
+    let isActive = false;
+    document.getElementById('active').onclick = function () {
+      if (isActive) {
+        endQuery();
+        isActive = false;
+      } else {
+        startQuery();
+        isActive = true;
+      }
+    }
+
+    var referrer = document.referrer;
+    var myURL = parseURL('www.baidu.com');
+    // console.log(referrer, myURL);
+
+    window.onpopstate = function (event) {
+      alert("location: " + document.location + ", state: " + JSON.stringify(event.state));
+    };
+  </script>
 </body>
+
 </html>
