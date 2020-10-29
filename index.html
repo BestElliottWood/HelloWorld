@@ -150,7 +150,8 @@
         e.src = roundtripUrl;
         o.parentNode.insertBefore(e, o);
     })(window, document);
-    adroll.track("pageView");
+    adroll.track("productView", {"products":[{"product_id":"123", "product_group":"duhanying"}]})
+    adroll.track("addToCart", {   "currency": "USD",   "products": [       {"product_id": "1234", "product_group": "abc", "quantity": 2, "price": "1500", "category": "abc"}  ]})
 </script>
 </head>
 
