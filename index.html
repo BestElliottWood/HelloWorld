@@ -83,7 +83,7 @@
             curVisible = !visibleArray[index];
             displayHandler(index + 1, curVisible);
             showAll = visibleArray.filter(item => item).length === visibleArray.length;
-            document.getElementById('btn_all').innerHTML = curVisible ? '全部隐藏' : '全部显示';
+            document.getElementById('btn_all').innerHTML = showAll ? '全部隐藏' : '全部显示';
           } else {
             curVisible = !showAll;
             document.getElementById('btn_all').innerHTML = curVisible ? '全部隐藏' : '全部显示';
